@@ -1,0 +1,61 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+import { FormField, Button, Checkbox, Form } from 'semantic-ui-react'
+
+function App() {
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    try {
+      await axios.post('http://localhost:5000/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      console.log('File uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading file: ', error);
+    }
+  };
+
+  return (
+    <div>
+      {/* <h2>Upload a File</h2>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={handleUpload}>Upload</button> */}
+      <Form>
+        <FormField>
+          <label>First Name</label>
+          <input placeholder='First Name' />
+        </FormField>
+        <FormField>
+          <label>Last Name</label>
+          <input placeholder='Last Name' />
+        </FormField>
+        <FormField>
+          <label>Email</label>
+          <input placeholder='example@email.com' type='email' />
+        </FormField>
+        <FormField>
+          <label>Mobile Number</label>
+          <input type='text' />
+        </FormField>
+        <FormField>
+          <label>Upload File</label>
+          <input type="file" onChange={handleFileChange} />
+        </FormField>
+        <Button onClick={handleUpload}>Submit</Button>
+      </Form>
+    </div>
+  );
+}
+
+export default App;
+
